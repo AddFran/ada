@@ -1,0 +1,197 @@
+import networkx as nx
+from networkx.drawing.nx_agraph import graphviz_layout
+import matplotlib.pyplot as plt
+import Aux_fun as af
+import json
+
+theshold=1
+
+# Aplicar con BFS y DFS
+
+# Mejores
+b2c_before,b2c=af.analizar_arbol("new_MST_b2c.gml",'y',theshold)
+b4c_before,b4c=af.analizar_arbol("new_MST_b4c.gml",'y',theshold)
+b8c_before,b8c=af.analizar_arbol("new_MST_b8c.gml",'y',theshold)
+b16c_before,b16c=af.analizar_arbol("new_MST_b16c.gml",'y',theshold)
+
+# Peores
+w2c_before,w2c=af.analizar_arbol("new_MST_w2c.gml",'y',theshold)
+w4c_before,w4c=af.analizar_arbol("new_MST_w4c.gml",'y',theshold)
+w8c_before,w8c=af.analizar_arbol("new_MST_w8c.gml",'y',theshold)
+w16c_before,w16c=af.analizar_arbol("new_MST_w16c.gml",'y',theshold)
+
+g=nx.read_gml("new_MST_b2c.gml")
+
+lista_b2c = af.unir_listas(af.bfs(b2c,g.graph["root"]),af.dfs(b2c,g.graph["root"]))
+lista_w2c = af.unir_listas(af.bfs(w2c,g.graph["root"]),af.dfs(w2c,g.graph["root"]))
+lista_b4c = af.unir_listas(af.bfs(b4c,g.graph["root"]),af.dfs(b4c,g.graph["root"]))
+lista_w4c = af.unir_listas(af.bfs(w4c,g.graph["root"]),af.dfs(w4c,g.graph["root"]))
+lista_b8c = af.unir_listas(af.bfs(b8c,g.graph["root"]),af.dfs(b8c,g.graph["root"]))
+lista_w8c = af.unir_listas(af.bfs(w8c,g.graph["root"]),af.dfs(w8c,g.graph["root"]))
+lista_b16c= af.unir_listas(af.bfs(b16c,g.graph["root"]),af.dfs(b16c,g.graph["root"]))
+lista_w16c= af.unir_listas(af.bfs(w16c,g.graph["root"]),af.dfs(w16c,g.graph["root"]))
+
+union_b=af.unir_listas(af.unir_listas(lista_b2c,lista_b4c),af.unir_listas(lista_b8c,lista_b16c))
+union_w=af.unir_listas(af.unir_listas(lista_w2c,lista_w4c),af.unir_listas(lista_w8c,lista_w16c))
+
+union_t=af.unir_listas(union_b,union_w)
+
+#pos1=graphviz_layout(b2c, prog='dot')
+pos1=af.tree_pos(b2c,'y')
+pos2=af.tree_pos(w2c,'y')
+pos3=af.tree_pos(b4c,'y')
+pos4=af.tree_pos(w4c,'y')
+pos5=af.tree_pos(b8c,'y')
+pos6=af.tree_pos(w8c,'y')
+pos7=af.tree_pos(b16c,'y')
+pos8=af.tree_pos(w16c,'y')
+
+pos1b=af.tree_pos(b2c_before,'y')
+pos2b=af.tree_pos(w2c_before,'y')
+pos3b=af.tree_pos(b4c_before,'y')
+pos4b=af.tree_pos(w4c_before,'y')
+pos5b=af.tree_pos(b8c_before,'y')
+pos6b=af.tree_pos(w8c_before,'y')
+pos7b=af.tree_pos(b16c_before,'y')
+pos8b=af.tree_pos(w16c_before,'y')
+
+##############################
+
+plt.figure(figsize=(14,6))
+# Arbol B2C
+plt.subplot(1,2,1)
+nx.draw_networkx(b2c, pos1, with_labels=True, node_color='lightgreen', edge_color='black',node_size=100,font_size=5,width=0.5 )
+plt.title("B2C")
+plt.axis('off')
+
+# Arbol W2C
+plt.subplot(1,2,2)
+nx.draw_networkx(b2c_before, pos1b, with_labels=True, node_color='lightblue', edge_color='black',node_size=100,font_size=5,width=0.5 )
+plt.title("B2C antes")
+plt.axis('off')
+
+plt.show()
+
+##############################
+
+# Conparacion antes despues
+plt.figure(figsize=(14,6))
+# Arbol B2C
+plt.subplot(2,4,1)
+nx.draw_networkx(b2c, pos1, with_labels=True, node_color='lightgreen', edge_color='black',node_size=100,font_size=5,width=0.5)
+plt.title("B2C")
+plt.axis('off')
+
+# Arbol W2C
+plt.subplot(2,4,5)
+nx.draw_networkx(b2c_before, pos1b, with_labels=True, node_color='lightblue', edge_color='black',node_size=100,font_size=5,width=0.5)
+plt.title("B2C antes")
+plt.axis('off')
+
+# Arbol W2C
+plt.subplot(2,4,2)
+nx.draw_networkx(b4c, pos3, with_labels=True, node_color='lightgreen', edge_color='black',node_size=100,font_size=5,width=0.5)
+plt.title("B4C")
+plt.axis('off')
+
+# Arbol W2C
+plt.subplot(2,4,6)
+nx.draw_networkx(b4c_before, pos3b, with_labels=True, node_color='lightblue', edge_color='black',node_size=100,font_size=5,width=0.5)
+plt.title("B4C antes")
+plt.axis('off')
+
+# Arbol W2C
+plt.subplot(2,4,3)
+nx.draw_networkx(b8c, pos5, with_labels=True, node_color='lightgreen', edge_color='black',node_size=100,font_size=5,width=0.5)
+plt.title("B8C")
+plt.axis('off')
+
+# Arbol W2C
+plt.subplot(2,4,7)
+nx.draw_networkx(b8c_before, pos5b, with_labels=True, node_color='lightblue', edge_color='black',node_size=100,font_size=5,width=0.5)
+plt.title("B8C antes")
+plt.axis('off')
+
+# Arbol W2C
+plt.subplot(2,4,4)
+nx.draw_networkx(b16c, pos7, with_labels=True, node_color='lightgreen', edge_color='black',node_size=100,font_size=5,width=0.5)
+plt.title("B16C")
+plt.axis('off')
+
+# Arbol W2C
+plt.subplot(2,4,8)
+nx.draw_networkx(b16c_before, pos7b, with_labels=True, node_color='lightblue', edge_color='black',node_size=100,font_size=5,width=0.5)
+plt.title("B16C antes")
+plt.axis('off')
+
+plt.show()
+
+
+##########################
+
+
+plt.figure(figsize=(14,6))
+# Arbol B2C
+plt.subplot(2,4,1)
+nx.draw_networkx(w2c, pos2, with_labels=True, node_color='lightgreen', edge_color='black',node_size=100,font_size=5,width=0.5)
+plt.title("W2C")
+plt.axis('off')
+
+# Arbol W2C
+plt.subplot(2,4,5)
+nx.draw_networkx(w2c_before, pos2b, with_labels=True, node_color='lightblue', edge_color='black',node_size=100,font_size=5,width=0.5)
+plt.title("W2C antes")
+plt.axis('off')
+
+# Arbol W2C
+plt.subplot(2,4,2)
+nx.draw_networkx(w4c, pos4, with_labels=True, node_color='lightgreen', edge_color='black',node_size=100,font_size=5,width=0.5)
+plt.title("W4C")
+plt.axis('off')
+
+# Arbol W2C
+plt.subplot(2,4,6)
+nx.draw_networkx(w4c_before, pos4b, with_labels=True, node_color='lightblue', edge_color='black',node_size=100,font_size=5,width=0.5)
+plt.title("W4C antes")
+plt.axis('off')
+
+# Arbol W2C
+plt.subplot(2,4,3)
+nx.draw_networkx(w8c, pos6, with_labels=True, node_color='lightgreen', edge_color='black',node_size=100,font_size=5,width=0.5)
+plt.title("W8C")
+plt.axis('off')
+
+# Arbol W2C
+plt.subplot(2,4,7)
+nx.draw_networkx(w8c_before, pos6b, with_labels=True, node_color='lightblue', edge_color='black',node_size=100,font_size=5,width=0.5)
+plt.title("W8C antes")
+plt.axis('off')
+
+# Arbol W2C
+plt.subplot(2,4,4)
+nx.draw_networkx(w16c, pos8, with_labels=True, node_color='lightgreen', edge_color='black',node_size=100,font_size=5,width=0.5)
+plt.title("W16C")
+plt.axis('off')
+
+# Arbol W2C
+plt.subplot(2,4,8)
+nx.draw_networkx(w16c_before, pos8b, with_labels=True, node_color='lightblue', edge_color='black',node_size=100,font_size=5,width=0.5)
+plt.title("W16C antes")
+plt.axis('off')
+
+plt.show()
+
+print("B2C :",lista_b2c)
+print("W2C :",lista_w2c)
+print("B4C :",lista_b4c)
+print("W4C :",lista_w4c)
+print("B8C :",lista_b8c)
+print("W8C :",lista_w8c)
+print("B16C:",lista_b16c)
+print("W16C:",lista_w16c)
+print("Union mejores : ",union_b)
+print("Union peores  : ",union_w)
+print("Union con raíz: ",union_t)
+
+with open("z_resultado_raiz.json", "w") as f:
+    json.dump(union_t, f)
