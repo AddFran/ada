@@ -194,6 +194,32 @@ def merge_sort(lista,ascendente=True):
     _merge_sort(0,len(lista)-1)
     return lista
 
+def counting_sort(arr):
+    if not arr:
+        return []
+
+    max_val=arr[0]
+    for i in range(1,len(arr)):
+        if arr[i]>max_val:
+            max_val=arr[i]
+
+    cnt_arr=[0]*(max_val+1)
+
+    for val in arr:
+        cnt_arr[val]+=1
+
+    for i in range(1,len(cnt_arr)):
+        cnt_arr[i]+=cnt_arr[i-1]
+
+    aux=[0]*len(arr)
+
+    for i in range(len(arr)-1,-1,-1):
+        v=arr[i]
+        aux[cnt_arr[v]-1]=v
+        cnt_arr[v]-=1
+
+    return aux
+
 ############### Matrices y grafos ########################
 
 def matriz_correlacion(le_dataframe):
@@ -214,11 +240,11 @@ def grafo_correlacion(adj_m,dist_m):
     for i in G.nodes:
         for j in G.nodes:
             if i!=j and G.has_edge(i,j):
-                peso = dist_m.loc[i, j]
-                G[i][j]['weight'] = float(peso)
+                peso=dist_m.loc[i, j]
+                G[i][j]['weight']=float(peso)
     return G
 
-def gml_to_dist_matrix(gml_file, output_csv):
+def gml_to_dist_matrix(gml_file,output_csv):
     # Cargar grafo desde archivo GML
     G=nx.read_gml(gml_file)
 
