@@ -85,13 +85,13 @@ graph [
   ]
   edge [
     source 0
-    target 20
-    weight 0.2406932560307477
+    target 11
+    weight 0.2161515517277024
   ]
   edge [
     source 0
-    target 11
-    weight 0.2161515517277024
+    target 20
+    weight 0.2406932560307477
   ]
   edge [
     source 0
@@ -135,13 +135,13 @@ graph [
   ]
   edge [
     source 10
-    target 11
-    weight 0.2565615286660148
+    target 13
+    weight 0.314253746135923
   ]
   edge [
     source 10
-    target 13
-    weight 0.314253746135923
+    target 11
+    weight 0.2565615286660148
   ]
   edge [
     source 11

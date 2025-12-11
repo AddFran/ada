@@ -4,7 +4,7 @@ from networkx.algorithms.community import greedy_modularity_communities
 import seaborn as sns
 import Aux_fun as af
 
-# Aplicar comunidades a cada particion, no solo a una
+# Aplicar comunidades a cada particion no solo a una
 
 MST_b2c=nx.read_gml("MST_b2c.gml")
 MST_b4c=nx.read_gml("MST_b4c.gml")
@@ -26,6 +26,7 @@ pos_w4c=af.tree_pos(MST_w4c,'y')
 pos_w8c=af.tree_pos(MST_w8c,'y')
 pos_w16c=af.tree_pos(MST_w16c,'y')
 
+# Cambiar segun corresponda
 MST_b=MST_b16c
 pos_b=pos_b16c
 

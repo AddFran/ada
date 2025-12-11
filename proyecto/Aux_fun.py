@@ -220,18 +220,18 @@ def grafo_correlacion(adj_m,dist_m):
 
 def gml_to_dist_matrix(gml_file, output_csv):
     # Cargar grafo desde archivo GML
-    G = nx.read_gml(gml_file)
+    G=nx.read_gml(gml_file)
 
     # Obtener lista ordenada de nodos
-    nodes = list(G.nodes())
+    nodes=list(G.nodes())
 
     # Crear matriz vacía
-    dist_matrix = pd.DataFrame(index=nodes, columns=nodes)
+    dist_matrix=pd.DataFrame(index=nodes, columns=nodes)
 
     # Rellenar con distancias (número de aristas)
     for i in nodes:
         # distancias desde i a todos los demás
-        lengths = nx.single_source_shortest_path_length(G, i)
+        lengths=nx.single_source_shortest_path_length(G, i)
         
         for j in nodes:
             dist_matrix.loc[i, j] = lengths.get(j, float('inf'))
@@ -241,57 +241,36 @@ def gml_to_dist_matrix(gml_file, output_csv):
 
 ################## Enraizamiento ############################
 
-def exportar_grafo_enraizado(G, root, filename):
-    """
-    Marca un nodo como raíz y exporta el grafo a un archivo .gml.
-    
-    Parámetros:
-        G        : grafo de NetworkX
-        root     : nodo que será marcado como raíz
-        filename : nombre del archivo .gml (ej: 'G_b4c.gml')
-    """
-
+def exportar_grafo_enraizado(G,root,filename):
     # Marcar la raíz como atributo del grafo
-    G.graph['root'] = root
-
+    G.graph['root']=root
     # Convertir valores NumPy a tipo nativo Python
     for _, attrs in G.nodes(data=True):
         for k, v in attrs.items():
-            if isinstance(v, np.generic):
-                attrs[k] = v.item()
-
+            if isinstance(v,np.generic):
+                attrs[k]=v.item()
     for _, _, attrs in G.edges(data=True):
-        for k, v in attrs.items():
-            if isinstance(v, np.generic):
-                attrs[k] = v.item()
+        for k,v in attrs.items():
+            if isinstance(v,np.generic):
+                attrs[k]=v.item()
 
     # Exportar a GML
     nx.write_gml(G, filename)
     print(f"Grafo exportado correctamente como '{filename}' con raíz '{root}'.")
 
-
 def exportar_grafo_no_enraizado(G,filename):
-    """
-    Marca un nodo como raíz y exporta el grafo a un archivo .gml.
-    
-    Parámetros:
-        G        : grafo de NetworkX
-        filename : nombre del archivo .gml (ej: 'G_b4c.gml')
-    """
-
     # Convertir valores NumPy a tipo nativo Python
     for _, attrs in G.nodes(data=True):
         for k, v in attrs.items():
-            if isinstance(v, np.generic):
-                attrs[k] = v.item()
-
+            if isinstance(v,np.generic):
+                attrs[k]=v.item()
     for _, _, attrs in G.edges(data=True):
         for k, v in attrs.items():
             if isinstance(v, np.generic):
-                attrs[k] = v.item()
+                attrs[k]=v.item()
 
     # Exportar a GML
-    nx.write_gml(G, filename)
+    nx.write_gml(G,filename)
     print(f"Grafo exportado correctamente como '{filename}'.")
 
 
@@ -301,7 +280,6 @@ def unir_listas(lista1,lista2):
     nueva_lista=[]
     for elem in lista1:
         nueva_lista.append(elem)
-
     for elem in lista2:
         repetido=False
         for existente in nueva_lista:
@@ -311,7 +289,6 @@ def unir_listas(lista1,lista2):
 
         if not repetido:
             nueva_lista.append(elem)
-
     return nueva_lista
 
 
@@ -368,43 +345,37 @@ def analizar_arbol_original(archivo_csv,raiz,threshold):
 
     return MST,pruned_tree
 
-def analizar_arbol(archivo_gml, raiz, threshold):
+def analizar_arbol(archivo_gml,raiz,threshold):
     # Cargar el grafo desde el archivo .gml
-    G = nx.read_gml(archivo_gml)
-    
-    # Asegurar que los nodos estén en formato string (GML a veces convierte a int)
-    G = nx.relabel_nodes(G, lambda x: str(x))
+    G=nx.read_gml(archivo_gml)
+    # Asegurar que los nodos estén en formato string
+    G=nx.relabel_nodes(G, lambda x: str(x))
     
     # Convertir a BFS-tree desde la raíz
     if raiz not in G.nodes:
         raise ValueError(f"La raíz '{raiz}' no está en el archivo GML.")
 
-    original_tree = nx.bfs_tree(G, source=raiz)
-
+    original_tree=nx.bfs_tree(G,source=raiz)
     # Calcular niveles (distancias desde la raíz)
-    niveles = nx.single_source_shortest_path_length(original_tree, source=raiz)
-
+    niveles=nx.single_source_shortest_path_length(original_tree,source=raiz)
     # Lista de nodos dentro del threshold original
-    nodos_a_mantener = [n for n, lvl in niveles.items() if lvl <= threshold]
-
-    # Subgrafo podado (igual que antes)
-    pruned_tree = original_tree.subgraph(nodos_a_mantener).copy()
-
+    nodos_a_mantener=[n for n,lvl in niveles.items() if lvl<=threshold]
+    # Subgrafo podado 
+    pruned_tree=original_tree.subgraph(nodos_a_mantener).copy()
     # Convertirlo de nuevo en árbol BFS dirigido
-    pruned_tree = nx.bfs_tree(pruned_tree, source=raiz)
-
-    # Retornar ambos árboles
+    pruned_tree=nx.bfs_tree(pruned_tree, source=raiz)
+    # Retornar ambos arboles
     return original_tree, pruned_tree
 
 ################################3
 
-def analizar_arbol2(archivo_csv, raiz, threshold, metodo="dfs"):
-    df = pd.read_csv(archivo_csv)
-    corr_matrix = df.corr(method='pearson')
-    corr_abs = corr_matrix.abs()
-    dist_matrix = 1 - corr_abs
-    adj_matrix = (corr_abs >= 0.6).astype(int)
-    np.fill_diagonal(adj_matrix.values, 0)
+def analizar_arbol2(archivo_csv, raiz,threshold,metodo="dfs"):
+    df=pd.read_csv(archivo_csv)
+    corr_matrix=df.corr(method='pearson')
+    corr_abs=corr_matrix.abs()
+    dist_matrix=1-corr_abs
+    adj_matrix=(corr_abs>=0.6).astype(int)
+    np.fill_diagonal(adj_matrix.values,0)
 
     G = nx.from_pandas_adjacency(adj_matrix)
     isolated_nodes = list(nx.isolates(G))
@@ -422,29 +393,21 @@ def analizar_arbol2(archivo_csv, raiz, threshold, metodo="dfs"):
     # Asignar pesos a las aristas
     for u, v in G.edges():
         G[u][v]["weight"] = dist_matrix.loc[u, v]
-
     # MST inicial
     MST = nx.minimum_spanning_tree(G, weight='weight', algorithm='kruskal')
-
     # Convertir a árbol dirigido
     new_MST = nx.bfs_tree(MST, source=raiz)
-
     # Asignar pesos de distancia
     for u, v in new_MST.edges():
         new_MST[u][v]["weight"] = dist_matrix.loc[u, v]
-
-    # Cálculo de profundidad/búsqueda
-
     if metodo == "bfs":
         # Distancia REAL en niveles
         niveles = nx.single_source_shortest_path_length(new_MST, source=raiz)
-
     elif metodo == "dfs":
         # Distancia según profundidad DFS
         niveles = {}
         for depth, node in enumerate(nx.dfs_preorder_nodes(new_MST, source=raiz)):
             niveles[node] = depth
-
     else:
         raise ValueError("El método debe ser 'bfs' o 'dfs'.")
 
@@ -522,22 +485,20 @@ def analizar_arbol_nr(archivo_csv):
 
     selected_component=[c for c in components if target in c][0]
     subtree=G_cut.subgraph(selected_component).copy()
-
     new_G=subtree.copy()  # subgrafo resultante
-
     return MST,new_G
 
 def comparar_arboles(G1,G2,inicio='y'):
     # Crear las listas y conjuntos
-    nodos_G1 = list(G1.nodes())
-    nodos_G2 = list(G2.nodes())
-    recorridos = []
-    diferentes = set()  # usar conjunto para evitar duplicados
+    nodos_G1=list(G1.nodes())
+    nodos_G2=list(G2.nodes())
+    recorridos=[]
+    diferentes=set()  # usar conjunto para evitar duplicados
 
     # Comenzar por el nodo inicial si existe en alguno de los grafos
     if inicio in nodos_G1 or inicio in nodos_G2:
-        nodos_G1 = [inicio] + [n for n in nodos_G1 if n != inicio]
-        nodos_G2 = [inicio] + [n for n in nodos_G2 if n != inicio]
+        nodos_G1=[inicio]+[n for n in nodos_G1 if n!=inicio]
+        nodos_G2=[inicio]+[n for n in nodos_G2 if n!=inicio]
     else:
         print(f"Nodo '{inicio}' no encontrado en ninguno de los grafos.")
 
@@ -545,11 +506,11 @@ def comparar_arboles(G1,G2,inicio='y'):
     for nodo in nodos_G1:
         if nodo not in recorridos:
             if nodo in nodos_G2:
-                ady_G1 = set(G1.neighbors(nodo))
-                ady_G2 = set(G2.neighbors(nodo))
+                ady_G1=set(G1.neighbors(nodo))
+                ady_G2=set(G2.neighbors(nodo))
 
                 # Comparar adyacencias
-                dif_ady = (ady_G1 - ady_G2) | (ady_G2 - ady_G1)
+                dif_ady=(ady_G1-ady_G2) | (ady_G2-ady_G1)
 
                 # Agregar diferencias y marcarlas como recorridas
                 for d in dif_ady:
@@ -616,36 +577,36 @@ def comparar_arboles_m(csv1,csv2): # funciona en algunos casos, en otros no (b2c
     # Convertir a lista ordenada antes de retornar
     return list(nodos_dif)
 
-def comparar_arboles_m2(csv1, csv2):
+def comparar_arboles_m2(csv1,csv2):
     import pandas as pd
     
     # Cargar matrices
-    M1 = pd.read_csv(csv1, index_col=0)
-    M2 = pd.read_csv(csv2, index_col=0)
+    M1=pd.read_csv(csv1,index_col=0)
+    M2=pd.read_csv(csv2,index_col=0)
     
-    nodos1 = list(M1.index)
-    nodos2 = list(M2.index)
+    nodos1=list(M1.index)
+    nodos2=list(M2.index)
 
     # Conjunto de diferencias
-    nodos_dif = set()
+    nodos_dif=set()
 
     # Nodos que existen en un dataframe pero no en el otro
-    nodos_dif.update(set(nodos1) - set(nodos2))
-    nodos_dif.update(set(nodos2) - set(nodos1))
+    nodos_dif.update(set(nodos1)-set(nodos2))
+    nodos_dif.update(set(nodos2)-set(nodos1))
 
     # Nodos comunes
-    nodos_comunes = sorted(list(set(nodos1) & set(nodos2)))
+    nodos_comunes=sorted(list(set(nodos1) & set(nodos2)))
 
-    # Comparar distancia entre pares sin repetir (i < j)
+    # Comparar distancia entre pares sin repetir
     for idx_i in range(len(nodos_comunes)):
         i = nodos_comunes[idx_i]
-        for idx_j in range(idx_i + 1, len(nodos_comunes)):
-            j = nodos_comunes[idx_j]
+        for idx_j in range(idx_i+1,len(nodos_comunes)):
+            j=nodos_comunes[idx_j]
 
-            d1 = M1.loc[i, j]
-            d2 = M2.loc[i, j]
+            d1=M1.loc[i,j]
+            d2=M2.loc[i,j]
 
-            if d1 != d2:
+            if d1!=d2:
                 nodos_dif.add(j)   # Se agrega el nodo que difiere según tu regla
 
     return list(nodos_dif)

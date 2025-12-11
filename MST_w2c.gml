@@ -181,11 +181,6 @@ graph [
   ]
   edge [
     source 14
-    target 24
-    weight 0.3389504845399445
-  ]
-  edge [
-    source 14
     target 15
     weight 0.1390691775306316
   ]
@@ -193,6 +188,11 @@ graph [
     source 14
     target 16
     weight 0.1489512791369298
+  ]
+  edge [
+    source 14
+    target 24
+    weight 0.3389504845399445
   ]
   edge [
     source 17

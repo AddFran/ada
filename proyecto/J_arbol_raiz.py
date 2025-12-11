@@ -6,30 +6,30 @@ import json
 
 theshold=1
 
-# Aplicar con BFS y DFS
-
-# Mejores
-b2c_before,b2c=af.analizar_arbol("new_MST_b2c.gml",'y',theshold)
-b4c_before,b4c=af.analizar_arbol("new_MST_b4c.gml",'y',theshold)
-b8c_before,b8c=af.analizar_arbol("new_MST_b8c.gml",'y',theshold)
-b16c_before,b16c=af.analizar_arbol("new_MST_b16c.gml",'y',theshold)
-
-# Peores
-w2c_before,w2c=af.analizar_arbol("new_MST_w2c.gml",'y',theshold)
-w4c_before,w4c=af.analizar_arbol("new_MST_w4c.gml",'y',theshold)
-w8c_before,w8c=af.analizar_arbol("new_MST_w8c.gml",'y',theshold)
-w16c_before,w16c=af.analizar_arbol("new_MST_w16c.gml",'y',theshold)
-
 g=nx.read_gml("new_MST_b2c.gml")
 
-lista_b2c = af.unir_listas(af.bfs(b2c,g.graph["root"]),af.dfs(b2c,g.graph["root"]))
-lista_w2c = af.unir_listas(af.bfs(w2c,g.graph["root"]),af.dfs(w2c,g.graph["root"]))
-lista_b4c = af.unir_listas(af.bfs(b4c,g.graph["root"]),af.dfs(b4c,g.graph["root"]))
-lista_w4c = af.unir_listas(af.bfs(w4c,g.graph["root"]),af.dfs(w4c,g.graph["root"]))
-lista_b8c = af.unir_listas(af.bfs(b8c,g.graph["root"]),af.dfs(b8c,g.graph["root"]))
-lista_w8c = af.unir_listas(af.bfs(w8c,g.graph["root"]),af.dfs(w8c,g.graph["root"]))
-lista_b16c= af.unir_listas(af.bfs(b16c,g.graph["root"]),af.dfs(b16c,g.graph["root"]))
-lista_w16c= af.unir_listas(af.bfs(w16c,g.graph["root"]),af.dfs(w16c,g.graph["root"]))
+# Mejores
+b2c_before,b2c=af.analizar_arbol("new_MST_b2c.gml",g.graph["root"],theshold)
+b4c_before,b4c=af.analizar_arbol("new_MST_b4c.gml",g.graph["root"],theshold)
+b8c_before,b8c=af.analizar_arbol("new_MST_b8c.gml",g.graph["root"],theshold)
+b16c_before,b16c=af.analizar_arbol("new_MST_b16c.gml",g.graph["root"],theshold)
+
+# Peores
+w2c_before,w2c=af.analizar_arbol("new_MST_w2c.gml",g.graph["root"],theshold)
+w4c_before,w4c=af.analizar_arbol("new_MST_w4c.gml",g.graph["root"],theshold)
+w8c_before,w8c=af.analizar_arbol("new_MST_w8c.gml",g.graph["root"],theshold)
+w16c_before,w16c=af.analizar_arbol("new_MST_w16c.gml",g.graph["root"],theshold)
+
+
+
+lista_b2c =af.unir_listas(af.bfs(b2c,g.graph["root"]),af.dfs(b2c,g.graph["root"]))
+lista_w2c =af.unir_listas(af.bfs(w2c,g.graph["root"]),af.dfs(w2c,g.graph["root"]))
+lista_b4c =af.unir_listas(af.bfs(b4c,g.graph["root"]),af.dfs(b4c,g.graph["root"]))
+lista_w4c =af.unir_listas(af.bfs(w4c,g.graph["root"]),af.dfs(w4c,g.graph["root"]))
+lista_b8c =af.unir_listas(af.bfs(b8c,g.graph["root"]),af.dfs(b8c,g.graph["root"]))
+lista_w8c =af.unir_listas(af.bfs(w8c,g.graph["root"]),af.dfs(w8c,g.graph["root"]))
+lista_b16c=af.unir_listas(af.bfs(b16c,g.graph["root"]),af.dfs(b16c,g.graph["root"]))
+lista_w16c=af.unir_listas(af.bfs(w16c,g.graph["root"]),af.dfs(w16c,g.graph["root"]))
 
 union_b=af.unir_listas(af.unir_listas(lista_b2c,lista_b4c),af.unir_listas(lista_b8c,lista_b16c))
 union_w=af.unir_listas(af.unir_listas(lista_w2c,lista_w4c),af.unir_listas(lista_w8c,lista_w16c))
@@ -37,37 +37,36 @@ union_w=af.unir_listas(af.unir_listas(lista_w2c,lista_w4c),af.unir_listas(lista_
 union_t=af.unir_listas(union_b,union_w)
 
 #pos1=graphviz_layout(b2c, prog='dot')
-pos1=af.tree_pos(b2c,'y')
-pos2=af.tree_pos(w2c,'y')
-pos3=af.tree_pos(b4c,'y')
-pos4=af.tree_pos(w4c,'y')
-pos5=af.tree_pos(b8c,'y')
-pos6=af.tree_pos(w8c,'y')
-pos7=af.tree_pos(b16c,'y')
-pos8=af.tree_pos(w16c,'y')
+pos1=af.tree_pos(b2c,g.graph["root"])
+pos2=af.tree_pos(w2c,g.graph["root"])
+pos3=af.tree_pos(b4c,g.graph["root"])
+pos4=af.tree_pos(w4c,g.graph["root"])
+pos5=af.tree_pos(b8c,g.graph["root"])
+pos6=af.tree_pos(w8c,g.graph["root"])
+pos7=af.tree_pos(b16c,g.graph["root"])
+pos8=af.tree_pos(w16c,g.graph["root"])
 
-pos1b=af.tree_pos(b2c_before,'y')
-pos2b=af.tree_pos(w2c_before,'y')
-pos3b=af.tree_pos(b4c_before,'y')
-pos4b=af.tree_pos(w4c_before,'y')
-pos5b=af.tree_pos(b8c_before,'y')
-pos6b=af.tree_pos(w8c_before,'y')
-pos7b=af.tree_pos(b16c_before,'y')
-pos8b=af.tree_pos(w16c_before,'y')
+pos1b=af.tree_pos(b2c_before,g.graph["root"])
+pos2b=af.tree_pos(w2c_before,g.graph["root"])
+pos3b=af.tree_pos(b4c_before,g.graph["root"])
+pos4b=af.tree_pos(w4c_before,g.graph["root"])
+pos5b=af.tree_pos(b8c_before,g.graph["root"])
+pos6b=af.tree_pos(w8c_before,g.graph["root"])
+pos7b=af.tree_pos(b16c_before,g.graph["root"])
+pos8b=af.tree_pos(w16c_before,g.graph["root"])
 
-##############################
 
 plt.figure(figsize=(14,6))
 # Arbol B2C
 plt.subplot(1,2,1)
 nx.draw_networkx(b2c, pos1, with_labels=True, node_color='lightgreen', edge_color='black',node_size=100,font_size=5,width=0.5 )
-plt.title("B2C")
+plt.title(f"Grafo recortado")
 plt.axis('off')
 
 # Arbol W2C
 plt.subplot(1,2,2)
 nx.draw_networkx(b2c_before, pos1b, with_labels=True, node_color='lightblue', edge_color='black',node_size=100,font_size=5,width=0.5 )
-plt.title("B2C antes")
+plt.title(f"Grafo orignal")
 plt.axis('off')
 
 plt.show()

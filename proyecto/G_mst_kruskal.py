@@ -3,7 +3,6 @@ import networkx as nx
 
 # Algoritmo
 alg="prim"
-
 # Agregar por algoritmo PRIM <-
 
 G_b2c=nx.read_gml("G_b2c.gml")
@@ -31,7 +30,7 @@ MST_w16c=nx.minimum_spanning_tree(G_w16c,weight='weight',algorithm=alg)
 # Mejores
 pos_b2c=nx.spring_layout(MST_b2c,seed=42)
 pos_b4c=nx.spring_layout(MST_b4c,seed=42)
-pos_b8=nx.spring_layout(MST_b8c,seed=42)
+pos_b8c=nx.spring_layout(MST_b8c,seed=42)
 pos_b16c=nx.spring_layout(MST_b16c,seed=42)
 
 # Peores
@@ -40,10 +39,13 @@ pos_w4c=nx.spring_layout(MST_w4c,seed=42)
 pos_w8c=nx.spring_layout(MST_w8c,seed=42)
 pos_w16c=nx.spring_layout(MST_w16c,seed=42)
 
+MSTb=MST_b16c
+posb=pos_b16c
+
 plt.figure(figsize=(8, 6))
-nx.draw_networkx_nodes(MST_b2c, pos_b2c, node_size=500, node_color='lightgreen')
-nx.draw_networkx_edges(MST_b2c, pos_b2c, width=2.0, edge_color='black')
-nx.draw_networkx_labels(MST_b2c, pos_b2c, font_size=8)
+nx.draw_networkx_nodes(MSTb, posb, node_size=500, node_color='lightgreen')
+nx.draw_networkx_edges(MSTb, posb, width=2.0, edge_color='black')
+nx.draw_networkx_labels(MSTb, posb, font_size=8)
 plt.title("Árbol de Expansión Mínima")
 plt.axis('off')
 plt.show()
