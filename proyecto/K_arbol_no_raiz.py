@@ -49,13 +49,13 @@ pos8b=af.tree_pos(before_w16c,'y')
 plt.figure(figsize=(14,6))
 # Arbol B2C
 plt.subplot(1,2,1)
-nx.draw_networkx(b4c, pos3, with_labels=True, node_color='lightgreen', edge_color='black',node_size=100,font_size=6,width=0.5)
+nx.draw_networkx(b8c, pos5, with_labels=True, node_color='lightgreen', edge_color='black',node_size=100,font_size=6,width=0.5)
 plt.title("Contraparte mejor")
 plt.axis('off')
 
 # Arbol W2C
 plt.subplot(1,2,2)
-nx.draw_networkx(w4c, pos4, with_labels=True, node_color='lightblue', edge_color='black',node_size=100,font_size=6,width=0.5)
+nx.draw_networkx(w8c, pos6, with_labels=True, node_color='lightblue', edge_color='black',node_size=100,font_size=6,width=0.5)
 plt.title("Contraparte peor")
 plt.axis('off')
 

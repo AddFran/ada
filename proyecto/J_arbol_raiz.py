@@ -20,7 +20,8 @@ w4c_before,w4c=af.analizar_arbol("new_MST_w4c.gml",g.graph["root"],theshold)
 w8c_before,w8c=af.analizar_arbol("new_MST_w8c.gml",g.graph["root"],theshold)
 w16c_before,w16c=af.analizar_arbol("new_MST_w16c.gml",g.graph["root"],theshold)
 
-
+# De cada particion 0.5 0.25... ()
+# interseccion
 
 lista_b2c =af.unir_listas(af.bfs(b2c,g.graph["root"]),af.dfs(b2c,g.graph["root"]))
 lista_w2c =af.unir_listas(af.bfs(w2c,g.graph["root"]),af.dfs(w2c,g.graph["root"]))

@@ -2,6 +2,7 @@ from collections import deque
 import networkx as nx
 import pandas as pd
 import numpy as np
+import itertools
 
 ########### Algoritmos de ordenamiento ########################
 
@@ -603,9 +604,8 @@ def comparar_arboles_m(csv1,csv2): # funciona en algunos casos, en otros no (b2c
     # Convertir a lista ordenada antes de retornar
     return list(nodos_dif)
 
+# Version matriz (v1.0)
 def comparar_arboles_m2(csv1,csv2):
-    import pandas as pd
-    
     # Cargar matrices
     M1=pd.read_csv(csv1,index_col=0)
     M2=pd.read_csv(csv2,index_col=0)
@@ -613,7 +613,7 @@ def comparar_arboles_m2(csv1,csv2):
     nodos1=list(M1.index)
     nodos2=list(M2.index)
 
-    # Conjunto de diferencias
+    # Diferencias
     nodos_dif=set()
 
     # Nodos que existen en un dataframe pero no en el otro
@@ -716,3 +716,73 @@ def pos_f(G,root,width=1.,vert_gap=0.2,vert_loc=0,xcenter=0.5,pos=None,parent=No
                 pos=pos,parent=root
             )
     return pos
+
+
+# Algoritmo Newman para detectar comunidades (v1.0)
+def links_between(A,B,G):
+    l=0
+    for u,v in G.edges():
+        if (u in A and v in B) or (u in B and v in A):
+            l+=1
+    return l
+
+def degree_sum(community,G):
+    return sum(G.degree(n) for n in community)
+
+def modularity(communities,G,m):
+    Q=0.0
+    for c in communities:
+        l_c=0
+        for u,v in G.edges():
+            if u in c and v in c:
+                l_c+=1
+        d_c=degree_sum(c,G)
+        Q+=(l_c/m)-(d_c/(2*m))**2 # Formulita
+    return Q
+
+def newman(G):
+    m=G.number_of_edges()
+    if m==0:
+        print("El grafo no tiene aristas.")
+        return
+
+    # Comunidades iniciales
+    communities=[{node} for node in G.nodes()]
+
+    # Algoritmo newman
+    improved=True
+
+    while improved and len(communities)>1:
+        improved=False
+        best_delta_Q=0
+        best_pair=None
+
+        # Probar todas las fusiones posibles
+        for i,j in itertools.combinations(range(len(communities)),2):
+            A=communities[i]
+            B=communities[j]
+            l_AB=links_between(A,B,G)
+            if l_AB==0:
+                continue 
+            dA=degree_sum(A,G)
+            dB=degree_sum(B,G)
+
+            delta_Q=(l_AB/m)-((dA*dB)/(2*m*m)) # formulita
+
+            if delta_Q>best_delta_Q:
+                best_delta_Q=delta_Q
+                best_pair=(i,j)
+
+        # Fusionar si mejora la modularidad
+        if best_pair is not None:
+            i,j=best_pair
+            communities[i]=communities[i] | communities[j]
+            del communities[j]
+            improved=True
+
+    # Resultados
+    Q_final=modularity(communities,G,m)
+    print("Comunidades detectadas:\n")
+    for idx,community in enumerate(communities,1):
+        print(f"Comunidad {idx}: {sorted(community)}")
+    print(f"\nModularidad final Q = {Q_final:.4f}")
